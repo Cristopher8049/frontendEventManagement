@@ -1,70 +1,40 @@
 .navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: #2E3940;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 20px;
-    z-index: 1000;
-    color: white;
+    padding: 20px 30px;
+    background-color: #000000;
 }
 
-.navbar__logo {
+.navbar-logo h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #ffffff;
+}
+
+.navbar-links {
+    list-style: none;
     display: flex;
-    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-links li {
+    margin-left: 20px;
+}
+
+.navbar-link {
+    color: #ffffff;
     text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+    font-weight: 400;
 }
 
-.navbar__logo-image {
-    height: 35px;
-    margin-right: 15px;
+.navbar-link:hover {
+    color: #026773;
 }
 
-.navbar__logo-text,
-.navbar__country {
-    color: white;
-}
-
-.navbar__link {
-    color: white;
-    text-decoration: none;
-    margin: 0 10px;
-}
-
-.navbar__left,
-.navbar__right {
-    display: flex;
-    align-items: center;
-}
-
-.navbar__right {
-    right: 0;
-}
-
-.navbar__button {
-    background-color: transparent;
-    border: 1px solid white;
-    color: white;
-    padding: 5px 15px;
-    margin-left: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.navbar__button--create-event:hover {
-    background-color: white;
-    color: #2c2f3b;
-}
-
-.navbar__language-selector {
-    margin-left: 10px;
-}
-
-.navbar__select {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
+.navbar-logo img {
+    height: 40px;
 }
