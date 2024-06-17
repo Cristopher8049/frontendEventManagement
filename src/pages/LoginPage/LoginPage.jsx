@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import styles from "./LoginPage.module.css"; // Importar CSS module
+import "./LoginPage.css"; // Importar CSS module
 
 const LoginPage = () => {
   const userRef = useRef();
@@ -33,7 +33,7 @@ const LoginPage = () => {
   return (
     <>
       {success ? (
-        <section className={`${styles.section} section`}>
+        <section className={"section"}>
           <h1 className="section__title">¡Has iniciado sesión!</h1>
           <br />
           <p>
@@ -43,16 +43,16 @@ const LoginPage = () => {
           </p>
         </section>
       ) : (
-        <section className={`${styles.section} section`}>
+        <section className={"section"}>
           <p
             ref={errRef}
-            className={errMsg ? `${styles.errmsg} errmsg` : styles.offscreen}
+            className={errMsg ? "errmsg error-message" : "offscreen"}
             aria-live="assertive"
           >
             {errMsg}
           </p>
           <h1 className="section__title">Iniciar sesión</h1>
-          <form onSubmit={handleSubmit} className={`${styles.form} form`}>
+          <form onSubmit={handleSubmit} className={"form"}>
             <label htmlFor="username" className="form__label">
               Nombre de usuario:
             </label>
@@ -64,7 +64,7 @@ const LoginPage = () => {
               onChange={(e) => setUser(e.target.value)}
               value={user}
               required
-              className={`${styles.input} form__input`}
+              className={"form-input"}
             />
 
             <label htmlFor="password" className="form__label">
@@ -76,16 +76,14 @@ const LoginPage = () => {
               onChange={(e) => setPwd(e.target.value)}
               value={pwd}
               required
-              className={`${styles.input} form__input`}
+              className={"form-input"}
             />
-            <button className={`${styles.button} form__button`}>
-              Iniciar sesión
-            </button>
+            <button className={"form-button"}>Iniciar sesión</button>
           </form>
-          <p className="section__text">
+          <p>
             ¿Necesitas una cuenta?
             <br />
-            <span className={`${styles.line} line`}>
+            <span className={"line"}>
               <a href="/SignUp" className="line__link">
                 Registrarse
               </a>

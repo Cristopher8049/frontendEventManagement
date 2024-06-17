@@ -5,7 +5,7 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import styles from "./RegisterPage.module.css"; // Import CSS module
+import "./RegisterPage.css"; // Import CSS directly
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -86,37 +86,33 @@ const RegisterPage = () => {
   return (
     <>
       {success ? (
-        <section className={`${styles.section} section`}>
+        <section className="section">
           <h1>¡Éxito!</h1>
           <p>
             <a href="#">Iniciar sesión</a>
           </p>
         </section>
       ) : (
-        <section className={`${styles.section} section`}>
+        <section className="section">
           <p
             ref={errRef}
-            className={errMsg ? `${styles.errmsg} errmsg` : styles.offscreen}
+            className={errMsg ? "errmsg error-message" : "offscreen"}
             aria-live="assertive"
           >
             {errMsg}
           </p>
-          <h1 className="section__title">Registrarse</h1>
-          <form onSubmit={handleSubmit} className={`${styles.form} form`}>
-            <label htmlFor="username" className="form__label">
+          <h1 className="section-title">Registrarse</h1>
+          <form onSubmit={handleSubmit} className="form">
+            <label htmlFor="username" className="form-label">
               Nombre de usuario:
               <FontAwesomeIcon
                 icon={faCheck}
-                className={
-                  validName ? `${styles.valid} form__icon--valid` : styles.hide
-                }
+                className={validName ? "form-icon-valid" : "offscreen"}
               />
               <FontAwesomeIcon
                 icon={faTimes}
                 className={
-                  validName || !user
-                    ? styles.hide
-                    : `${styles.invalid} form__icon--invalid`
+                  validName || !user ? "offscreen" : "form-icon-invalid"
                 }
               />
             </label>
@@ -132,14 +128,14 @@ const RegisterPage = () => {
               aria-describedby="uidnote"
               onFocus={() => setUserFocus(true)}
               onBlur={() => setUserFocus(false)}
-              className={`${styles.input} form__input`}
+              className="form-input"
             />
             <p
               id="uidnote"
               className={
                 userFocus && user && !validName
-                  ? `${styles.instructions} form__instructions`
-                  : styles.offscreen
+                  ? "form-instructions"
+                  : "offscreen"
               }
             >
               <FontAwesomeIcon icon={faInfoCircle} />
@@ -150,21 +146,15 @@ const RegisterPage = () => {
               Se permiten letras, números, guiones bajos y guiones.
             </p>
 
-            <label htmlFor="password" className="form__label">
+            <label htmlFor="password" className="form-label">
               Contraseña:
               <FontAwesomeIcon
                 icon={faCheck}
-                className={
-                  validPwd ? `${styles.valid} form__icon--valid` : styles.hide
-                }
+                className={validPwd ? "form-icon-valid" : "offscreen"}
               />
               <FontAwesomeIcon
                 icon={faTimes}
-                className={
-                  validPwd || !pwd
-                    ? styles.hide
-                    : `${styles.invalid} form__icon--invalid`
-                }
+                className={validPwd || !pwd ? "offscreen" : "form-icon-invalid"}
               />
             </label>
             <input
@@ -177,14 +167,12 @@ const RegisterPage = () => {
               aria-describedby="pwdnote"
               onFocus={() => setPwdFocus(true)}
               onBlur={() => setPwdFocus(false)}
-              className={`${styles.input} form__input`}
+              className="form-input"
             />
             <p
               id="pwdnote"
               className={
-                pwdFocus && !validPwd
-                  ? `${styles.instructions} form__instructions`
-                  : styles.offscreen
+                pwdFocus && !validPwd ? "form-instructions" : "offscreen"
               }
             >
               <FontAwesomeIcon icon={faInfoCircle} />
@@ -201,22 +189,18 @@ const RegisterPage = () => {
               <span aria-label="porcentaje">%</span>
             </p>
 
-            <label htmlFor="confirm_pwd" className="form__label">
+            <label htmlFor="confirm_pwd" className="form-label">
               Confirmar Contraseña:
               <FontAwesomeIcon
                 icon={faCheck}
                 className={
-                  validMatch && matchPwd
-                    ? `${styles.valid} form__icon--valid`
-                    : styles.hide
+                  validMatch && matchPwd ? "form-icon-valid" : "offscreen"
                 }
               />
               <FontAwesomeIcon
                 icon={faTimes}
                 className={
-                  validMatch || !matchPwd
-                    ? styles.hide
-                    : `${styles.invalid} form__icon--invalid`
+                  validMatch || !matchPwd ? "offscreen" : "form-icon-invalid"
                 }
               />
             </label>
@@ -230,14 +214,12 @@ const RegisterPage = () => {
               aria-describedby="confirmnote"
               onFocus={() => setMatchFocus(true)}
               onBlur={() => setMatchFocus(false)}
-              className={`${styles.input} form__input`}
+              className="form-input"
             />
             <p
               id="confirmnote"
               className={
-                matchFocus && !validMatch
-                  ? `${styles.instructions} form__instructions`
-                  : styles.offscreen
+                matchFocus && !validMatch ? "form-instructions" : "offscreen"
               }
             >
               <FontAwesomeIcon icon={faInfoCircle} />
@@ -247,16 +229,16 @@ const RegisterPage = () => {
             <button
               type="submit"
               disabled={!validName || !validPwd || !validMatch}
-              className="form__button"
+              className="form-button"
             >
               Registrarse
             </button>
           </form>
-          <p className="section__text">
+          <p>
             Ya estás registrado?
             <br />
             <span className="line">
-              <a href="/login" className="line__link">
+              <a href="/login" className="line-link">
                 Iniciar Sesión
               </a>
             </span>
