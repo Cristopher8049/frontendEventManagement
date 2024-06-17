@@ -86,32 +86,38 @@ const RegisterPage = () => {
   return (
     <>
       {success ? (
-        <section className={styles.section}>
+        <section className={`${styles.section} section`}>
           <h1>¡Éxito!</h1>
           <p>
             <a href="#">Iniciar sesión</a>
           </p>
         </section>
       ) : (
-        <section className={styles.section}>
+        <section className={`${styles.section} section`}>
           <p
             ref={errRef}
-            className={errMsg ? styles.errmsg : styles.offscreen}
+            className={errMsg ? `${styles.errmsg} errmsg` : styles.offscreen}
             aria-live="assertive"
           >
             {errMsg}
           </p>
-          <h1>Registrarse</h1>
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <label htmlFor="username">
+          <h1 className="section__title">Registrarse</h1>
+          <form onSubmit={handleSubmit} className={`${styles.form} form`}>
+            <label htmlFor="username" className="form__label">
               Nombre de usuario:
               <FontAwesomeIcon
                 icon={faCheck}
-                className={validName ? styles.valid : styles.hide}
+                className={
+                  validName ? `${styles.valid} form__icon--valid` : styles.hide
+                }
               />
               <FontAwesomeIcon
                 icon={faTimes}
-                className={validName || !user ? styles.hide : styles.invalid}
+                className={
+                  validName || !user
+                    ? styles.hide
+                    : `${styles.invalid} form__icon--invalid`
+                }
               />
             </label>
             <input
@@ -126,13 +132,13 @@ const RegisterPage = () => {
               aria-describedby="uidnote"
               onFocus={() => setUserFocus(true)}
               onBlur={() => setUserFocus(false)}
-              className={styles.input}
+              className={`${styles.input} form__input`}
             />
             <p
               id="uidnote"
               className={
                 userFocus && user && !validName
-                  ? styles.instructions
+                  ? `${styles.instructions} form__instructions`
                   : styles.offscreen
               }
             >
@@ -144,15 +150,21 @@ const RegisterPage = () => {
               Se permiten letras, números, guiones bajos y guiones.
             </p>
 
-            <label htmlFor="password">
+            <label htmlFor="password" className="form__label">
               Contraseña:
               <FontAwesomeIcon
                 icon={faCheck}
-                className={validPwd ? styles.valid : styles.hide}
+                className={
+                  validPwd ? `${styles.valid} form__icon--valid` : styles.hide
+                }
               />
               <FontAwesomeIcon
                 icon={faTimes}
-                className={validPwd || !pwd ? styles.hide : styles.invalid}
+                className={
+                  validPwd || !pwd
+                    ? styles.hide
+                    : `${styles.invalid} form__icon--invalid`
+                }
               />
             </label>
             <input
@@ -165,12 +177,14 @@ const RegisterPage = () => {
               aria-describedby="pwdnote"
               onFocus={() => setPwdFocus(true)}
               onBlur={() => setPwdFocus(false)}
-              className={styles.input}
+              className={`${styles.input} form__input`}
             />
             <p
               id="pwdnote"
               className={
-                pwdFocus && !validPwd ? styles.instructions : styles.offscreen
+                pwdFocus && !validPwd
+                  ? `${styles.instructions} form__instructions`
+                  : styles.offscreen
               }
             >
               <FontAwesomeIcon icon={faInfoCircle} />
@@ -187,16 +201,22 @@ const RegisterPage = () => {
               <span aria-label="porcentaje">%</span>
             </p>
 
-            <label htmlFor="confirm_pwd">
+            <label htmlFor="confirm_pwd" className="form__label">
               Confirmar Contraseña:
               <FontAwesomeIcon
                 icon={faCheck}
-                className={validMatch && matchPwd ? styles.valid : styles.hide}
+                className={
+                  validMatch && matchPwd
+                    ? `${styles.valid} form__icon--valid`
+                    : styles.hide
+                }
               />
               <FontAwesomeIcon
                 icon={faTimes}
                 className={
-                  validMatch || !matchPwd ? styles.hide : styles.invalid
+                  validMatch || !matchPwd
+                    ? styles.hide
+                    : `${styles.invalid} form__icon--invalid`
                 }
               />
             </label>
@@ -210,13 +230,13 @@ const RegisterPage = () => {
               aria-describedby="confirmnote"
               onFocus={() => setMatchFocus(true)}
               onBlur={() => setMatchFocus(false)}
-              className={styles.input}
+              className={`${styles.input} form__input`}
             />
             <p
               id="confirmnote"
               className={
                 matchFocus && !validMatch
-                  ? styles.instructions
+                  ? `${styles.instructions} form__instructions`
                   : styles.offscreen
               }
             >
@@ -227,16 +247,18 @@ const RegisterPage = () => {
             <button
               type="submit"
               disabled={!validName || !validPwd || !validMatch}
+              className="form__button"
             >
               Registrarse
             </button>
           </form>
-          <p>
-            Ya estas registrado?
+          <p className="section__text">
+            Ya estás registrado?
             <br />
             <span className="line">
-              {/*put router link here*/}
-              <a href="/login">Iniciar Sesión</a>
+              <a href="/login" className="line__link">
+                Iniciar Sesión
+              </a>
             </span>
           </p>
         </section>

@@ -33,25 +33,29 @@ const LoginPage = () => {
   return (
     <>
       {success ? (
-        <section className={styles.section}>
-          <h1>¡Has iniciado sesión!</h1>
+        <section className={`${styles.section} section`}>
+          <h1 className="section__title">¡Has iniciado sesión!</h1>
           <br />
           <p>
-            <a href="#">Ir a la página principal</a>
+            <a href="#" className="section__link">
+              Ir a la página principal
+            </a>
           </p>
         </section>
       ) : (
-        <section className={styles.section}>
+        <section className={`${styles.section} section`}>
           <p
             ref={errRef}
-            className={errMsg ? styles.errmsg : styles.offscreen}
+            className={errMsg ? `${styles.errmsg} errmsg` : styles.offscreen}
             aria-live="assertive"
           >
             {errMsg}
           </p>
-          <h1>Iniciar sesión</h1>
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <label htmlFor="username">Nombre de usuario:</label>
+          <h1 className="section__title">Iniciar sesión</h1>
+          <form onSubmit={handleSubmit} className={`${styles.form} form`}>
+            <label htmlFor="username" className="form__label">
+              Nombre de usuario:
+            </label>
             <input
               type="text"
               id="username"
@@ -60,25 +64,31 @@ const LoginPage = () => {
               onChange={(e) => setUser(e.target.value)}
               value={user}
               required
-              className={styles.input}
+              className={`${styles.input} form__input`}
             />
 
-            <label htmlFor="password">Contraseña:</label>
+            <label htmlFor="password" className="form__label">
+              Contraseña:
+            </label>
             <input
               type="password"
               id="password"
               onChange={(e) => setPwd(e.target.value)}
               value={pwd}
               required
-              className={styles.input}
+              className={`${styles.input} form__input`}
             />
-            <button className={styles.button}>Iniciar sesión</button>
+            <button className={`${styles.button} form__button`}>
+              Iniciar sesión
+            </button>
           </form>
-          <p>
+          <p className="section__text">
             ¿Necesitas una cuenta?
             <br />
-            <span className={styles.line}>
-              <a href="/SignUp">Registrarse</a>
+            <span className={`${styles.line} line`}>
+              <a href="/SignUp" className="line__link">
+                Registrarse
+              </a>
             </span>
           </p>
         </section>
