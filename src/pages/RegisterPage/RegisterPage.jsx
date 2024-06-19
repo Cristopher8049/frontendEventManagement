@@ -5,21 +5,28 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./RegisterPage.css"; // Import CSS directly
+import Navbar from "../../components/Navbar/Navbar";
+import "./RegisterPage.css";
 
-const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const REGISTER_URL = "/register";
 
-// test
-
 const RegisterPage = () => {
-  const userRef = useRef();
+  const nombreRef = useRef();
   const errRef = useRef();
 
-  const [user, setUser] = useState("");
-  const [validName, setValidName] = useState(false);
-  const [userFocus, setUserFocus] = useState(false);
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [email, setEmail] = useState("");
+  const [validEmail, setValidEmail] = useState(false);
+  const [emailFocus, setEmailFocus] = useState(false);
+
+  const [dob, setDob] = useState("");
+  const [direccion, setDireccion] = useState("");
+  const [organizacion, setOrganizacion] = useState("");
+  const [profesion, setProfesion] = useState("");
+  const [cargo, setCargo] = useState("");
 
   const [pwd, setPwd] = useState("");
   const [validPwd, setValidPwd] = useState(false);
@@ -33,12 +40,12 @@ const RegisterPage = () => {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    userRef.current.focus();
+    nombreRef.current.focus();
   }, []);
 
   useEffect(() => {
-    setValidName(USER_REGEX.test(user));
-  }, [user]);
+    setValidEmail(EMAIL_REGEX.test(email));
+  }, [email]);
 
   useEffect(() => {
     setValidPwd(PWD_REGEX.test(pwd));
@@ -47,46 +54,21 @@ const RegisterPage = () => {
 
   useEffect(() => {
     setErrMsg("");
-  }, [user, pwd, matchPwd]);
+  }, [nombre, apellido, email, pwd, matchPwd]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const v1 = USER_REGEX.test(user);
+    const v1 = EMAIL_REGEX.test(email);
     const v2 = PWD_REGEX.test(pwd);
     if (!v1 || !v2) {
       setErrMsg("Entrada no válida");
       return;
     }
-    try {
-      const response = await axios.post(
-        REGISTER_URL,
-        JSON.stringify({ user, pwd }),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-      console.log(response?.data);
-      console.log(response?.accessToken);
-      console.log(JSON.stringify(response));
-      setSuccess(true);
-      setUser("");
-      setPwd("");
-      setMatchPwd("");
-    } catch (err) {
-      if (!err?.response) {
-        setErrMsg("Sin respuesta del servidor");
-      } else if (err.response?.status === 409) {
-        setErrMsg("Nombre de usuario ya en uso");
-      } else {
-        setErrMsg("Registro fallido");
-      }
-      errRef.current.focus();
-    }
   };
 
   return (
     <>
+      <Navbar />
       {success ? (
         <section className="section">
           <h1>¡Éxito!</h1>
@@ -105,48 +87,129 @@ const RegisterPage = () => {
           </p>
           <h1 className="section-title">Registrarse</h1>
           <form onSubmit={handleSubmit} className="form">
-            <label htmlFor="username" className="form-label">
-              Nombre de usuario:
+            <label htmlFor="nombre" className="form-label">
+              Nombre:
+            </label>
+            <input
+              type="text"
+              id="nombre"
+              ref={nombreRef}
+              autoComplete="off"
+              onChange={(e) => setNombre(e.target.value)}
+              value={nombre}
+              required
+              className="form-input"
+            />
+
+            <label htmlFor="apellido" className="form-label">
+              Apellido:
+            </label>
+            <input
+              type="text"
+              id="apellido"
+              autoComplete="off"
+              onChange={(e) => setApellido(e.target.value)}
+              value={apellido}
+              required
+              className="form-input"
+            />
+
+            <label htmlFor="email" className="form-label">
+              Correo Electrónico:
               <FontAwesomeIcon
                 icon={faCheck}
-                className={validName ? "form-icon-valid" : "offscreen"}
+                className={validEmail ? "form-icon-valid" : "offscreen"}
               />
               <FontAwesomeIcon
                 icon={faTimes}
                 className={
-                  validName || !user ? "offscreen" : "form-icon-invalid"
+                  validEmail || !email ? "offscreen" : "form-icon-invalid"
                 }
               />
             </label>
             <input
-              type="text"
-              id="username"
-              ref={userRef}
-              autoComplete="off"
-              onChange={(e) => setUser(e.target.value)}
-              value={user}
+              type="email"
+              id="email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
               required
-              aria-invalid={validName ? "false" : "true"}
-              aria-describedby="uidnote"
-              onFocus={() => setUserFocus(true)}
-              onBlur={() => setUserFocus(false)}
+              aria-invalid={validEmail ? "false" : "true"}
+              aria-describedby="emailnote"
+              onFocus={() => setEmailFocus(true)}
+              onBlur={() => setEmailFocus(false)}
               className="form-input"
             />
             <p
-              id="uidnote"
+              id="emailnote"
               className={
-                userFocus && user && !validName
+                emailFocus && email && !validEmail
                   ? "form-instructions"
                   : "offscreen"
               }
             >
               <FontAwesomeIcon icon={faInfoCircle} />
-              4 a 24 caracteres.
-              <br />
-              Debe comenzar con una letra.
-              <br />
-              Se permiten letras, números, guiones bajos y guiones.
+              Formato de correo no válido.
             </p>
+
+            <label htmlFor="dob" className="form-label">
+              Fecha de Nacimiento:
+            </label>
+            <input
+              type="date"
+              id="dob"
+              onChange={(e) => setDob(e.target.value)}
+              value={dob}
+              required
+              className="form-input"
+            />
+
+            <label htmlFor="direccion" className="form-label">
+              Dirección:
+            </label>
+            <input
+              type="text"
+              id="direccion"
+              onChange={(e) => setDireccion(e.target.value)}
+              value={direccion}
+              required
+              className="form-input"
+            />
+
+            <label htmlFor="organizacion" className="form-label">
+              Organización:
+            </label>
+            <input
+              type="text"
+              id="organizacion"
+              onChange={(e) => setOrganizacion(e.target.value)}
+              value={organizacion}
+              required
+              className="form-input"
+            />
+
+            <label htmlFor="profesion" className="form-label">
+              Profesión:
+            </label>
+            <input
+              type="text"
+              id="profesion"
+              onChange={(e) => setProfesion(e.target.value)}
+              value={profesion}
+              required
+              className="form-input"
+            />
+
+            <label htmlFor="cargo" className="form-label">
+              Cargo:
+            </label>
+            <input
+              type="text"
+              id="cargo"
+              onChange={(e) => setCargo(e.target.value)}
+              value={cargo}
+              required
+              className="form-input"
+            />
 
             <label htmlFor="password" className="form-label">
               Contraseña:
@@ -230,14 +293,14 @@ const RegisterPage = () => {
 
             <button
               type="submit"
-              disabled={!validName || !validPwd || !validMatch}
+              disabled={!validEmail || !validPwd || !validMatch}
               className="form-button"
             >
               Registrarse
             </button>
           </form>
           <p>
-            Ya estás registrado?
+            ¿Ya estás registrado?
             <br />
             <span className="line">
               <a href="/login" className="line-link">

@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
-import "./LoginPage.css"; // Importar CSS module
+import "./LoginPage.css";
+import Navbar from "../../components/Navbar/Navbar";
 
 const LoginPage = () => {
   const userRef = useRef();
@@ -32,6 +33,7 @@ const LoginPage = () => {
 
   return (
     <>
+      <Navbar />
       {success ? (
         <section className={"section"}>
           <h1 className="section__title">¡Has iniciado sesión!</h1>
@@ -54,7 +56,7 @@ const LoginPage = () => {
           <h1 className="section__title">Iniciar sesión</h1>
           <form onSubmit={handleSubmit} className={"form"}>
             <label htmlFor="username" className="form__label">
-              Nombre de usuario:
+              Correo Electrónico:
             </label>
             <input
               type="text"
