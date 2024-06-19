@@ -10,37 +10,36 @@ import "./RegisterPage.css";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const REGISTER_URL = "/register";
+const REGISTER_URL = "http://localhost:8000/auth/register";
 
 const RegisterPage = () => {
-  const nombreRef = useRef();
+  const firstNameRef = useRef();
   const errRef = useRef();
 
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [validEmail, setValidEmail] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
 
-  const [dob, setDob] = useState("");
-  const [direccion, setDireccion] = useState("");
-  const [organizacion, setOrganizacion] = useState("");
-  const [profesion, setProfesion] = useState("");
-  const [cargo, setCargo] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [address, setAddress] = useState("");
+  const [organization, setOrganization] = useState("");
+  const [position, setPosition] = useState("");
 
-  const [pwd, setPwd] = useState("");
-  const [validPwd, setValidPwd] = useState(false);
-  const [pwdFocus, setPwdFocus] = useState(false);
+  const [password, setPassword] = useState("");
+  const [validPassword, setValidPassword] = useState(false);
+  const [passwordFocus, setPasswordFocus] = useState(false);
 
-  const [matchPwd, setMatchPwd] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [validMatch, setValidMatch] = useState(false);
-  const [matchFocus, setMatchFocus] = useState(false);
+  const [confirmPasswordFocus, setConfirmPasswordFocus] = useState(false);
 
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    nombreRef.current.focus();
+    firstNameRef.current.focus();
   }, []);
 
   useEffect(() => {
@@ -48,21 +47,61 @@ const RegisterPage = () => {
   }, [email]);
 
   useEffect(() => {
-    setValidPwd(PWD_REGEX.test(pwd));
-    setValidMatch(pwd === matchPwd);
-  }, [pwd, matchPwd]);
+    setValidPassword(PWD_REGEX.test(password));
+    setValidMatch(password === confirmPassword);
+  }, [password, confirmPassword]);
 
   useEffect(() => {
     setErrMsg("");
-  }, [nombre, apellido, email, pwd, matchPwd]);
+  }, [firstName, lastName, email, password, confirmPassword]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const v1 = EMAIL_REGEX.test(email);
-    const v2 = PWD_REGEX.test(pwd);
+    const v2 = PWD_REGEX.test(password);
     if (!v1 || !v2) {
       setErrMsg("Entrada no válida");
       return;
+    }
+
+    try {
+      const response = await fetch(REGISTER_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password,
+          birthDate,
+          address,
+          organization,
+          position,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Fallo al registrarse");
+      }
+
+      const data = await response.json();
+      console.log(data);
+
+      setSuccess(true);
+      // Optionally, you can reset the form fields here
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setBirthDate("");
+      setAddress("");
+      setOrganization("");
+      setPosition("");
+      setPassword("");
+      setConfirmPassword("");
+    } catch (err) {
+      setErrMsg(err.message || "Fallo en la solicitud de registro");
     }
   };
 
@@ -87,29 +126,29 @@ const RegisterPage = () => {
           </p>
           <h1 className="section-title">Registrarse</h1>
           <form onSubmit={handleSubmit} className="form">
-            <label htmlFor="nombre" className="form-label">
+            <label htmlFor="firstName" className="form-label">
               Nombre:
             </label>
             <input
               type="text"
-              id="nombre"
-              ref={nombreRef}
+              id="firstName"
+              ref={firstNameRef}
               autoComplete="off"
-              onChange={(e) => setNombre(e.target.value)}
-              value={nombre}
+              onChange={(e) => setFirstName(e.target.value)}
+              value={firstName}
               required
               className="form-input"
             />
 
-            <label htmlFor="apellido" className="form-label">
+            <label htmlFor="lastName" className="form-label">
               Apellido:
             </label>
             <input
               type="text"
-              id="apellido"
+              id="lastName"
               autoComplete="off"
-              onChange={(e) => setApellido(e.target.value)}
-              value={apellido}
+              onChange={(e) => setLastName(e.target.value)}
+              value={lastName}
               required
               className="form-input"
             />
@@ -151,62 +190,50 @@ const RegisterPage = () => {
               Formato de correo no válido.
             </p>
 
-            <label htmlFor="dob" className="form-label">
+            <label htmlFor="birthDate" className="form-label">
               Fecha de Nacimiento:
             </label>
             <input
               type="date"
-              id="dob"
-              onChange={(e) => setDob(e.target.value)}
-              value={dob}
+              id="birthDate"
+              onChange={(e) => setBirthDate(e.target.value)}
+              value={birthDate}
               required
               className="form-input"
             />
 
-            <label htmlFor="direccion" className="form-label">
+            <label htmlFor="address" className="form-label">
               Dirección:
             </label>
             <input
               type="text"
-              id="direccion"
-              onChange={(e) => setDireccion(e.target.value)}
-              value={direccion}
+              id="address"
+              onChange={(e) => setAddress(e.target.value)}
+              value={address}
               required
               className="form-input"
             />
 
-            <label htmlFor="organizacion" className="form-label">
+            <label htmlFor="organization" className="form-label">
               Organización:
             </label>
             <input
               type="text"
-              id="organizacion"
-              onChange={(e) => setOrganizacion(e.target.value)}
-              value={organizacion}
+              id="organization"
+              onChange={(e) => setOrganization(e.target.value)}
+              value={organization}
               required
               className="form-input"
             />
 
-            <label htmlFor="profesion" className="form-label">
-              Profesión:
-            </label>
-            <input
-              type="text"
-              id="profesion"
-              onChange={(e) => setProfesion(e.target.value)}
-              value={profesion}
-              required
-              className="form-input"
-            />
-
-            <label htmlFor="cargo" className="form-label">
+            <label htmlFor="position" className="form-label">
               Cargo:
             </label>
             <input
               type="text"
-              id="cargo"
-              onChange={(e) => setCargo(e.target.value)}
-              value={cargo}
+              id="position"
+              onChange={(e) => setPosition(e.target.value)}
+              value={position}
               required
               className="form-input"
             />
@@ -215,29 +242,33 @@ const RegisterPage = () => {
               Contraseña:
               <FontAwesomeIcon
                 icon={faCheck}
-                className={validPwd ? "form-icon-valid" : "offscreen"}
+                className={validPassword ? "form-icon-valid" : "offscreen"}
               />
               <FontAwesomeIcon
                 icon={faTimes}
-                className={validPwd || !pwd ? "offscreen" : "form-icon-invalid"}
+                className={
+                  validPassword || !password ? "offscreen" : "form-icon-invalid"
+                }
               />
             </label>
             <input
               type="password"
               id="password"
-              onChange={(e) => setPwd(e.target.value)}
-              value={pwd}
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
               required
-              aria-invalid={validPwd ? "false" : "true"}
+              aria-invalid={validPassword ? "false" : "true"}
               aria-describedby="pwdnote"
-              onFocus={() => setPwdFocus(true)}
-              onBlur={() => setPwdFocus(false)}
+              onFocus={() => setPasswordFocus(true)}
+              onBlur={() => setPasswordFocus(false)}
               className="form-input"
             />
             <p
               id="pwdnote"
               className={
-                pwdFocus && !validPwd ? "form-instructions" : "offscreen"
+                passwordFocus && !validPassword
+                  ? "form-instructions"
+                  : "offscreen"
               }
             >
               <FontAwesomeIcon icon={faInfoCircle} />
@@ -254,37 +285,43 @@ const RegisterPage = () => {
               <span aria-label="porcentaje">%</span>
             </p>
 
-            <label htmlFor="confirm_pwd" className="form-label">
+            <label htmlFor="confirmPassword" className="form-label">
               Confirmar Contraseña:
               <FontAwesomeIcon
                 icon={faCheck}
                 className={
-                  validMatch && matchPwd ? "form-icon-valid" : "offscreen"
+                  validMatch && confirmPassword
+                    ? "form-icon-valid"
+                    : "offscreen"
                 }
               />
               <FontAwesomeIcon
                 icon={faTimes}
                 className={
-                  validMatch || !matchPwd ? "offscreen" : "form-icon-invalid"
+                  validMatch || !confirmPassword
+                    ? "offscreen"
+                    : "form-icon-invalid"
                 }
               />
             </label>
             <input
               type="password"
-              id="confirm_pwd"
-              onChange={(e) => setMatchPwd(e.target.value)}
-              value={matchPwd}
+              id="confirmPassword"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={confirmPassword}
               required
               aria-invalid={validMatch ? "false" : "true"}
               aria-describedby="confirmnote"
-              onFocus={() => setMatchFocus(true)}
-              onBlur={() => setMatchFocus(false)}
+              onFocus={() => setConfirmPasswordFocus(true)}
+              onBlur={() => setConfirmPasswordFocus(false)}
               className="form-input"
             />
             <p
               id="confirmnote"
               className={
-                matchFocus && !validMatch ? "form-instructions" : "offscreen"
+                confirmPasswordFocus && !validMatch
+                  ? "form-instructions"
+                  : "offscreen"
               }
             >
               <FontAwesomeIcon icon={faInfoCircle} />
@@ -293,7 +330,7 @@ const RegisterPage = () => {
 
             <button
               type="submit"
-              disabled={!validEmail || !validPwd || !validMatch}
+              disabled={!validEmail || !validPassword || !validMatch}
               className="form-button"
             >
               Registrarse
