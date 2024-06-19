@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import CreateEventPage from "./pages/CreateEventPage/CreateEventPage";
 import Testpage from "./pages/Testpage/Testpage";
+import EventDetailPage from "./pages/EventDetailPage/EventDetailPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/signup" element={<RegisterPage />} />
           <Route path="/createEvent" element={<CreateEventPage />} />
           <Route path="/TestPage" element={<Testpage />} />
+          <Route path="/event/:eventId" element={<EventDetailPage />} />
         </Routes>
       </BrowserRouter>
     </>

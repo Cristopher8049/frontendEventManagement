@@ -1,15 +1,16 @@
 import { useRef, useState, useEffect } from "react";
 import "./LoginPage.css";
 import Navbar from "../../components/Navbar/Navbar";
+import { useAuth } from "../../context/authContext";
 
 const LoginPage = () => {
+  const { login, user } = useAuth();
   const userRef = useRef();
   const errRef = useRef();
 
-  const [user, setUser] = useState("");
-  const [pwd, setPwd] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     userRef.current.focus();
@@ -17,24 +18,24 @@ const LoginPage = () => {
 
   useEffect(() => {
     setErrMsg("");
-  }, [user, pwd]);
+  }, [email, password]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Simular un proceso de inicio de sesión exitoso
-    if (user === "testuser" && pwd === "password") {
-      setSuccess(true);
-    } else {
-      setErrMsg("Inicio de sesión fallido");
-      errRef.current.focus();
+    try {
+      await login(email, password);
+    } catch (error) {
+      setErrMsg(error.message || 'Login failed');
     }
+
+    errRef.current.focus();
   };
 
   return (
     <>
       <Navbar />
-      {success ? (
+      {user ? (
         <section className={"section"}>
           <h1 className="section__title">¡Has iniciado sesión!</h1>
           <br />
@@ -55,16 +56,16 @@ const LoginPage = () => {
           </p>
           <h1 className="section__title">Iniciar sesión</h1>
           <form onSubmit={handleSubmit} className={"form"}>
-            <label htmlFor="username" className="form__label">
+            <label htmlFor="email" className="form__label">
               Correo Electrónico:
             </label>
             <input
               type="text"
-              id="username"
+              id="email"
               ref={userRef}
               autoComplete="off"
-              onChange={(e) => setUser(e.target.value)}
-              value={user}
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
               required
               className={"form-input"}
             />
@@ -75,8 +76,8 @@ const LoginPage = () => {
             <input
               type="password"
               id="password"
-              onChange={(e) => setPwd(e.target.value)}
-              value={pwd}
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
               required
               className={"form-input"}
             />
