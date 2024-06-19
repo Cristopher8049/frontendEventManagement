@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import EventDetails from "../../components/Events/EventDetails";
+import Navbar from "../../components/Navbar/Navbar";
 import "./Testpage.css"; // Import CSS file for styling
 
 const Testpage = () => {
@@ -24,13 +25,16 @@ const Testpage = () => {
   };
 
   return (
-    <div className="testpage-container">
-      <div className="events-container">
-        {events.map((event) => (
-          <EventDetails key={event.eventId} event={event} />
-        ))}
+    <>
+      <Navbar />
+      <div className="testpage-container">
+        <div className="events-container">
+          {events.map((event) => (
+            <EventDetails key={event.eventId} event={event} />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
