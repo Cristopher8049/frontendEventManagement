@@ -10,11 +10,12 @@ const CreateEventPage = () => {
   const [eventDate, setEventDate] = useState("");
   const [eventStartTime, setEventStartTime] = useState("");
   const [eventEndTime, setEventEndTime] = useState("");
+  const [error, setError] = useState("");
 
-  const handleEventSubmit = (e) => {
+  const handleEventSubmit = async (e) => {
     e.preventDefault();
-    // Aquí podrías agregar la lógica para enviar los datos del evento a tu backend o realizar cualquier otra acción necesaria
-    console.log("Datos del evento:", {
+
+    const eventData = {
       eventName,
       eventDescription,
       eventLocation,
@@ -23,21 +24,46 @@ const CreateEventPage = () => {
       eventDate,
       eventStartTime,
       eventEndTime,
-    });
-    // Resetear los campos después de enviar el evento
-    setEventName("");
-    setEventDescription("");
-    setEventLocation("");
-    setContactInfo("");
-    setEventImage("");
-    setEventDate("");
-    setEventStartTime("");
-    setEventEndTime("");
+    };
+
+    console.log("Submitting event data:", eventData); // Log the data being submitted
+
+    try {
+      const response = await fetch("http://localhost:8000/events/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(eventData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to create event");
+      }
+
+      alert("Event created successfully!");
+      // Reset form fields after successful submission
+      setEventName("");
+      setEventDescription("");
+      setEventLocation("");
+      setContactInfo("");
+      setEventImage("");
+      setEventDate("");
+      setEventStartTime("");
+      setEventEndTime("");
+      setError(""); // Clear any previous error messages
+    } catch (error) {
+      console.error("Error creating event:", error);
+      setError(error.message);
+      alert(`Failed to create event. ${error.message}`);
+    }
   };
 
   return (
     <div className="create-event-container">
       <h2 className="page-title">Crear Nuevo Evento</h2>
+      {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleEventSubmit} className="event-form">
         <div className="form-group">
           <label htmlFor="eventName">Nombre del Evento:</label>
