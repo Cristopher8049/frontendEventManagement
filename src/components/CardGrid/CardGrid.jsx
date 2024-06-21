@@ -16,7 +16,7 @@ function CardGrid() {
         </div>
         <div className="card">
           <img
-            src="https://scontent.fsrz1-1.fna.fbcdn.net/v/t39.30808-6/438808539_930433525445407_7047342878272535601_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=YQZoyIP1EbQQ7kNvgE4qek4&_nc_ht=scontent.fsrz1-1.fna&oh=00_AYA1XNlnI9ne39gDaA6pCSCv9P14E7s6KQ4q0FO2bNMgqA&oe=6675BB5A"
+            src="https://instagram.fsrz1-2.fna.fbcdn.net/v/t39.30808-6/438275615_17895462746991331_2965249647577883689_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xOTk5eDE5OTkuc2RyLmYzMDgwOCJ9&_nc_ht=instagram.fsrz1-2.fna.fbcdn.net&_nc_cat=107&_nc_ohc=snzagbHZ5X8Q7kNvgGy8lp_&edm=ALQROFkAAAAA&ccb=7-5&ig_cache_key=MzM1MjE2NDkyMjM5MTE4NTMzOA%3D%3D.2-ccb7-5&oh=00_AYD7PVI2KqJkqi0nVGrBXQj2rIPGTg_ZWL9ORK4wDHr1xw&oe=667B8D37&_nc_sid=fc8dfb"
             alt="Imagen 2"
           />
           <h3>Concierto Trueno</h3>

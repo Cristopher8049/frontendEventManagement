@@ -4,6 +4,7 @@ const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const login = async (email, password) => {
         try {
@@ -13,15 +14,16 @@ export const AuthContextProvider = ({ children }) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
+                credentials: 'include',
             });
 
+            const data = await response.json();
+
             if (response.ok) {
-                const data = await response.json();
                 setUser(data.user);
-                localStorage.setItem('authToken', data.token);
+                console.log("Login successful:", data);
             } else {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Login failed');
+                throw new Error(data.message || 'Login failed');
             }
         } catch (error) {
             console.error('Error logging in:', error);
@@ -38,6 +40,8 @@ export const AuthContextProvider = ({ children }) => {
 
             if (response.ok) {
                 setUser(null);
+                localStorage.removeItem('authToken');
+                console.log("Logout successful, token removed");
             } else {
                 throw new Error('Logout failed');
             }
@@ -47,33 +51,33 @@ export const AuthContextProvider = ({ children }) => {
         }
     };
 
-    useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                const response = await fetch(`http://localhost:8000/user`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-                    },
-                });
+    const checkAuth = async () => {
+        try {
+            const response = await fetch('http://localhost:8000/auth/verify', {
+                method: 'GET',
+                credentials: 'include',
+            });
 
-                if (response.ok) {
-                    const data = await response.json();
-                    setUser(data.user);
-                } else {
-                    setUser(null);
-                }
-            } catch (error) {
-                console.error('Error checking auth state:', error);
+            if (response.ok) {
+                const data = await response.json();
+                setUser(data.user);
+            } else {
                 setUser(null);
             }
-        };
+        } catch (error) {
+            console.error('Error checking auth:', error);
+            setUser(null);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         checkAuth();
     }, []);
 
     return (
-        <AuthContext.Provider value={{ login, logout, user }}>
+        <AuthContext.Provider value={{ user, loading, login, logout, checkAuth }}>
             {children}
         </AuthContext.Provider>
     );
