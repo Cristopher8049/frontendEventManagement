@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import "./LoginPage.css";
 import Navbar from "../../components/Navbar/Navbar";
-import { useAuth } from "../../context/authContext";
+import useAuth from "../../hooks/useAuth";
 
 const LoginPage = () => {
   const { login, user } = useAuth();
