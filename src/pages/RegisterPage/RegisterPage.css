@@ -1,24 +1,20 @@
-.register-container,
-.login-container {
+.register-container {
   display: flex;
   height: 100vh;
 }
 
-.register-image,
-.login-image {
+.register-image {
   flex: 1;
   overflow: hidden;
 }
 
-.register-image img,
-.login-image img {
+.register-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.register-form-container,
-.login-form-container {
+.register-form-container {
   flex: 1;
   display: flex;
   justify-content: center;
@@ -43,8 +39,7 @@
   color: #140e84;
 }
 
-.register-form,
-.login-form {
+.register-form {
   display: flex;
   flex-direction: column;
 }
@@ -79,8 +74,7 @@
   transition: background-color 0.3s;
 }
 
-.register-button:hover:not(:disabled),
-.login-button:hover {
+.register-button:hover:not(:disabled) {
   background-color: #0056b3;
 }
 
@@ -94,19 +88,18 @@
   margin-bottom: 1rem;
 }
 
-.login-link,
 .signup-link {
   margin-top: 1.5rem;
   text-align: center;
 }
 
-.login-link a,
+
 .signup-link a {
   color: #007bff;
   text-decoration: none;
 }
 
-.login-link a:hover,
+
 .signup-link a:hover {
   text-decoration: underline;
 }
@@ -140,27 +133,21 @@
   left: -9999px;
 }
 
-/* Media query para dispositivos móviles */
 @media (max-width: 768px) {
 
-  .register-container,
-  .login-container {
+  .register-container {
     flex-direction: column;
   }
 
-  .register-image,
-  .login-image {
+  .register-image {
     display: none;
-    /* Oculta la imagen en dispositivos móviles */
   }
 
-  .register-form-container,
-  .login-form-container {
+  .register-form-container {
     width: 100%;
   }
 
-  .register-form-wrapper,
-  .login-form-wrapper {
+  .register-form-wrapper {
     width: 90%;
     padding: 1rem;
   }
