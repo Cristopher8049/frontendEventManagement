@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import styles from "./EventDetailPage.module.css";
 import { useLocation } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function EventDetailPage() {
   const location = useLocation();
+  const navigate = useNavigate();
   const event = location.state?.eventDetails;
   const { userId } = useAuth();
   const [isAttending, setIsAttending] = useState(false);
@@ -25,7 +27,7 @@ function EventDetailPage() {
       }
     };
     fetchAttendanceStatus();
-  }, [event.eventId, userId]);
+  }, [event.eventId]);
 
   const formatEventDate = (date) => {
     if (date === "No date") return date;
@@ -50,12 +52,16 @@ function EventDetailPage() {
   const formatEventTime = (time) => {
     if (time === "No time") return time;
     const [hours, minutes] = time.split(":");
-    return `${parseInt(hours)}:${minutes} ${
-      parseInt(hours) < 12 ? "AM" : "PM"
-    }`;
+    return `${parseInt(hours)}:${minutes} ${parseInt(hours) < 12 ? "AM" : "PM"
+      }`;
   };
 
   const handleToggleAttendance = async () => {
+    if (!userId) {
+      navigate("/login");
+      return;
+    }
+
     const registrationData = {
       eventId: event.eventId,
       userId: userId,
