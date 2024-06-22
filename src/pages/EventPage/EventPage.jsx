@@ -30,6 +30,7 @@ function EventPage() {
             <Navbar />
             <div style={{ height: "80px" }}></div>
             <div className="card-grid-container">
+                <h1>Eventos</h1>
                 <div className="card-grid">
                     {events.map((event) => (
                         event && <CardGrid key={event.eventId} event={event} />

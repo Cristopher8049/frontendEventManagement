@@ -7,6 +7,7 @@ import CreateEventPage from "./pages/CreateEventPage/CreateEventPage";
 import EventDetailPage from "./pages/EventDetailPage/EventDetailPage";
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
 import EventPage from "./pages/EventPage/EventPage";
+import MyEventsPage from "./pages/MyEventsPage/MyEventsPage";
 
 
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/createEvent" element={<ProtectedRoutes><CreateEventPage /></ProtectedRoutes>} />
         <Route path="/events" element={<EventPage />} />
         <Route path="/events/:eventId" element={<EventDetailPage />} />
+        <Route path="/my-events" element={<ProtectedRoutes><MyEventsPage /></ProtectedRoutes>} />
       </Routes>
     </BrowserRouter>
   );

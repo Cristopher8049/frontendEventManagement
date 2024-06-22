@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./CreateEventPage.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
+import useAuth from "../../hooks/useAuth";
 
 const CreateEventPage = () => {
   const [eventName, setEventName] = useState("");
@@ -13,6 +14,7 @@ const CreateEventPage = () => {
   const [eventStartTime, setEventStartTime] = useState("");
   const [eventEndTime, setEventEndTime] = useState("");
   const [error, setError] = useState("");
+  const { userId } = useAuth();
 
   const handleEventSubmit = async (e) => {
     e.preventDefault();
@@ -26,9 +28,9 @@ const CreateEventPage = () => {
       eventDate,
       eventStartTime,
       eventEndTime,
+      userId,
     };
 
-    console.log("Submitting event data:", eventData);
 
     try {
       const response = await fetch("http://localhost:8000/events/create", {
