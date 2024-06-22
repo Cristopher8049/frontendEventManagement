@@ -1,11 +1,12 @@
 import { useRef, useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   faCheck,
   faTimes,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Navbar from "../../components/Navbar/Navbar";
+import useAuth from "../../hooks/useAuth";
 import "./RegisterPage.css";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -13,6 +14,11 @@ const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const REGISTER_URL = "http://localhost:8000/auth/register";
 
 const RegisterPage = () => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
   const firstNameRef = useRef();
   const errRef = useRef();
 
@@ -36,7 +42,6 @@ const RegisterPage = () => {
   const [confirmPasswordFocus, setConfirmPasswordFocus] = useState(false);
 
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     firstNameRef.current.focus();
@@ -89,265 +94,228 @@ const RegisterPage = () => {
       const data = await response.json();
       console.log(data);
 
-      setSuccess(true);
-      // Optionally, you can reset the form fields here
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setBirthDate("");
-      setAddress("");
-      setOrganization("");
-      setPosition("");
-      setPassword("");
-      setConfirmPassword("");
+      try {
+        await login(email, password);
+        navigate(from, { replace: true });
+      } catch (loginError) {
+        console.error("Error al iniciar sesión automáticamente:", loginError);
+        setErrMsg("Registro exitoso, pero no se pudo iniciar sesión automáticamente. Por favor, inicie sesión manualmente.");
+      }
     } catch (err) {
       setErrMsg(err.message || "Fallo en la solicitud de registro");
     }
   };
 
   return (
-    <>
-      <Navbar />
-      {success ? (
-        <section className="section">
-          <h1>¡Éxito!</h1>
-          <p>
-            <a href="#">Iniciar sesión</a>
-          </p>
-        </section>
-      ) : (
-        <section className="section">
+    <div className="register-container">
+      <div className="register-image">
+        <img src="https://i.postimg.cc/Xvk2bhDk/wallpaperflare-com-wallpaper-1.jpg" alt="Register" />
+      </div>
+      <div className="register-form-container">
+        <div className="register-form-wrapper">
+          <h1 className="register-title">Registrarse</h1>
           <p
             ref={errRef}
-            className={errMsg ? "errmsg error-message" : "offscreen"}
+            className={errMsg ? "error-message" : "offscreen"}
             aria-live="assertive"
           >
             {errMsg}
           </p>
-          <h1 className="section-title">Registrarse</h1>
-          <form onSubmit={handleSubmit} className="form">
-            <label htmlFor="firstName" className="form-label">
-              Nombre:
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              ref={firstNameRef}
-              autoComplete="off"
-              onChange={(e) => setFirstName(e.target.value)}
-              value={firstName}
-              required
-              className="form-input"
-            />
-
-            <label htmlFor="lastName" className="form-label">
-              Apellido:
-            </label>
-            <input
-              type="text"
-              id="lastName"
-              autoComplete="off"
-              onChange={(e) => setLastName(e.target.value)}
-              value={lastName}
-              required
-              className="form-input"
-            />
-
-            <label htmlFor="email" className="form-label">
-              Correo Electrónico:
-              <FontAwesomeIcon
-                icon={faCheck}
-                className={validEmail ? "form-icon-valid" : "offscreen"}
+          <form onSubmit={handleSubmit} className="register-form">
+            <div className="form-group">
+              <label htmlFor="firstName" className="form-label">
+                Nombre:
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                ref={firstNameRef}
+                autoComplete="off"
+                onChange={(e) => setFirstName(e.target.value)}
+                value={firstName}
+                required
+                className="form-input"
               />
-              <FontAwesomeIcon
-                icon={faTimes}
-                className={
-                  validEmail || !email ? "offscreen" : "form-icon-invalid"
-                }
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="lastName" className="form-label">
+                Apellido:
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                autoComplete="off"
+                onChange={(e) => setLastName(e.target.value)}
+                value={lastName}
+                required
+                className="form-input"
               />
-            </label>
-            <input
-              type="email"
-              id="email"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              required
-              aria-invalid={validEmail ? "false" : "true"}
-              aria-describedby="emailnote"
-              onFocus={() => setEmailFocus(true)}
-              onBlur={() => setEmailFocus(false)}
-              className="form-input"
-            />
-            <p
-              id="emailnote"
-              className={
-                emailFocus && email && !validEmail
-                  ? "form-instructions"
-                  : "offscreen"
-              }
-            >
-              <FontAwesomeIcon icon={faInfoCircle} />
-              Formato de correo no válido.
-            </p>
+            </div>
 
-            <label htmlFor="birthDate" className="form-label">
-              Fecha de Nacimiento:
-            </label>
-            <input
-              type="date"
-              id="birthDate"
-              onChange={(e) => setBirthDate(e.target.value)}
-              value={birthDate}
-              required
-              className="form-input"
-            />
-
-            <label htmlFor="address" className="form-label">
-              Dirección:
-            </label>
-            <input
-              type="text"
-              id="address"
-              onChange={(e) => setAddress(e.target.value)}
-              value={address}
-              required
-              className="form-input"
-            />
-
-            <label htmlFor="organization" className="form-label">
-              Organización:
-            </label>
-            <input
-              type="text"
-              id="organization"
-              onChange={(e) => setOrganization(e.target.value)}
-              value={organization}
-              required
-              className="form-input"
-            />
-
-            <label htmlFor="position" className="form-label">
-              Cargo:
-            </label>
-            <input
-              type="text"
-              id="position"
-              onChange={(e) => setPosition(e.target.value)}
-              value={position}
-              required
-              className="form-input"
-            />
-
-            <label htmlFor="password" className="form-label">
-              Contraseña:
-              <FontAwesomeIcon
-                icon={faCheck}
-                className={validPassword ? "form-icon-valid" : "offscreen"}
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">
+                Correo Electrónico:
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  className={validEmail ? "valid-icon" : "offscreen"}
+                />
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  className={validEmail || !email ? "offscreen" : "invalid-icon"}
+                />
+              </label>
+              <input
+                type="email"
+                id="email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                required
+                aria-invalid={validEmail ? "false" : "true"}
+                aria-describedby="emailnote"
+                onFocus={() => setEmailFocus(true)}
+                onBlur={() => setEmailFocus(false)}
+                className="form-input"
               />
-              <FontAwesomeIcon
-                icon={faTimes}
-                className={
-                  validPassword || !password ? "offscreen" : "form-icon-invalid"
-                }
-              />
-            </label>
-            <input
-              type="password"
-              id="password"
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-              required
-              aria-invalid={validPassword ? "false" : "true"}
-              aria-describedby="pwdnote"
-              onFocus={() => setPasswordFocus(true)}
-              onBlur={() => setPasswordFocus(false)}
-              className="form-input"
-            />
-            <p
-              id="pwdnote"
-              className={
-                passwordFocus && !validPassword
-                  ? "form-instructions"
-                  : "offscreen"
-              }
-            >
-              <FontAwesomeIcon icon={faInfoCircle} />
-              8 a 24 caracteres.
-              <br />
-              Debe incluir letras mayúsculas y minúsculas, un número y un
-              carácter especial.
-              <br />
-              Caracteres especiales permitidos:{" "}
-              <span aria-label="signo de exclamación">!</span>{" "}
-              <span aria-label="símbolo de arroba">@</span>{" "}
-              <span aria-label="almohadilla">#</span>{" "}
-              <span aria-label="signo de dólar">$</span>{" "}
-              <span aria-label="porcentaje">%</span>
-            </p>
+              <p id="emailnote" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
+                <FontAwesomeIcon icon={faInfoCircle} />
+                Formato de correo no válido.
+              </p>
+            </div>
 
-            <label htmlFor="confirmPassword" className="form-label">
-              Confirmar Contraseña:
-              <FontAwesomeIcon
-                icon={faCheck}
-                className={
-                  validMatch && confirmPassword
-                    ? "form-icon-valid"
-                    : "offscreen"
-                }
+            <div className="form-group">
+              <label htmlFor="birthDate" className="form-label">
+                Fecha de Nacimiento:
+              </label>
+              <input
+                type="date"
+                id="birthDate"
+                onChange={(e) => setBirthDate(e.target.value)}
+                value={birthDate}
+                required
+                className="form-input"
               />
-              <FontAwesomeIcon
-                icon={faTimes}
-                className={
-                  validMatch || !confirmPassword
-                    ? "offscreen"
-                    : "form-icon-invalid"
-                }
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="address" className="form-label">
+                Dirección:
+              </label>
+              <input
+                type="text"
+                id="address"
+                onChange={(e) => setAddress(e.target.value)}
+                value={address}
+                required
+                className="form-input"
               />
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              value={confirmPassword}
-              required
-              aria-invalid={validMatch ? "false" : "true"}
-              aria-describedby="confirmnote"
-              onFocus={() => setConfirmPasswordFocus(true)}
-              onBlur={() => setConfirmPasswordFocus(false)}
-              className="form-input"
-            />
-            <p
-              id="confirmnote"
-              className={
-                confirmPasswordFocus && !validMatch
-                  ? "form-instructions"
-                  : "offscreen"
-              }
-            >
-              <FontAwesomeIcon icon={faInfoCircle} />
-              Confirmación de contraseña.
-            </p>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="organization" className="form-label">
+                Organización:
+              </label>
+              <input
+                type="text"
+                id="organization"
+                onChange={(e) => setOrganization(e.target.value)}
+                value={organization}
+                required
+                className="form-input"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="position" className="form-label">
+                Cargo:
+              </label>
+              <input
+                type="text"
+                id="position"
+                onChange={(e) => setPosition(e.target.value)}
+                value={position}
+                required
+                className="form-input"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">
+                Contraseña:
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  className={validPassword ? "valid-icon" : "offscreen"}
+                />
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  className={validPassword || !password ? "offscreen" : "invalid-icon"}
+                />
+              </label>
+              <input
+                type="password"
+                id="password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                required
+                aria-invalid={validPassword ? "false" : "true"}
+                aria-describedby="pwdnote"
+                onFocus={() => setPasswordFocus(true)}
+                onBlur={() => setPasswordFocus(false)}
+                className="form-input"
+              />
+              <p id="pwdnote" className={passwordFocus && !validPassword ? "instructions" : "offscreen"}>
+                <FontAwesomeIcon icon={faInfoCircle} />
+                8 a 24 caracteres.<br />
+                Debe incluir letras mayúsculas y minúsculas, un número y un carácter especial.<br />
+                Caracteres especiales permitidos: <span aria-label="signo de exclamación">!</span> <span aria-label="símbolo de arroba">@</span> <span aria-label="almohadilla">#</span> <span aria-label="signo de dólar">$</span> <span aria-label="porcentaje">%</span>
+              </p>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="confirmPassword" className="form-label">
+                Confirmar Contraseña:
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  className={validMatch && confirmPassword ? "valid-icon" : "offscreen"}
+                />
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  className={validMatch || !confirmPassword ? "offscreen" : "invalid-icon"}
+                />
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                value={confirmPassword}
+                required
+                aria-invalid={validMatch ? "false" : "true"}
+                aria-describedby="confirmnote"
+                onFocus={() => setConfirmPasswordFocus(true)}
+                onBlur={() => setConfirmPasswordFocus(false)}
+                className="form-input"
+              />
+              <p id="confirmnote" className={confirmPasswordFocus && !validMatch ? "instructions" : "offscreen"}>
+                <FontAwesomeIcon icon={faInfoCircle} />
+                Debe coincidir con la primera entrada de contraseña.
+              </p>
+            </div>
 
             <button
               type="submit"
               disabled={!validEmail || !validPassword || !validMatch}
-              className="form-button"
+              className="register-button"
             >
               Registrarse
             </button>
           </form>
-          <p>
-            ¿Ya estás registrado?
-            <br />
-            <span className="line">
-              <a href="/login" className="line-link">
-                Iniciar Sesión
-              </a>
-            </span>
+          <p className="login-link">
+            ¿Ya estás registrado?{" "}
+            <a href="/login">Iniciar Sesión</a>
           </p>
-        </section>
-      )}
-    </>
+        </div>
+      </div>
+    </div>
   );
 };
 

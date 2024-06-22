@@ -1,5 +1,5 @@
 .card-grid-container {
-  padding: 50px 0;
+  padding: 0px 0;
   width: 80%;
   margin: 0 auto;
 }
@@ -12,6 +12,7 @@
 }
 
 .card-grid {
+  margin-top: 40px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
@@ -39,6 +40,7 @@
   text-align: left;
   font-weight: 600;
   border-radius: 0 0 8px 8px;
+  color: #333333;
 }
 
 .card h4 {
@@ -52,6 +54,8 @@
 }
 
 .card a {
-  text-decoration: none; /* Remove underline */
-  color: inherit; /* Inherit text color */
+  text-decoration: none;
+  /* Remove underline */
+  color: inherit;
+  /* Inherit text color */
 }

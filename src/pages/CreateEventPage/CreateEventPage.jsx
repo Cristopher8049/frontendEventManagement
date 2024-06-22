@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./CreateEventPage.css";
+import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/Footer/Footer";
 
 const CreateEventPage = () => {
   const [eventName, setEventName] = useState("");
@@ -26,7 +28,7 @@ const CreateEventPage = () => {
       eventEndTime,
     };
 
-    console.log("Submitting event data:", eventData); // Log the data being submitted
+    console.log("Submitting event data:", eventData);
 
     try {
       const response = await fetch("http://localhost:8000/events/create", {
@@ -43,7 +45,6 @@ const CreateEventPage = () => {
       }
 
       alert("Event created successfully!");
-      // Reset form fields after successful submission
       setEventName("");
       setEventDescription("");
       setEventLocation("");
@@ -52,103 +53,110 @@ const CreateEventPage = () => {
       setEventDate("");
       setEventStartTime("");
       setEventEndTime("");
-      setError(""); // Clear any previous error messages
+      setError("");
     } catch (error) {
       console.error("Error creating event:", error);
       setError(error.message);
-      alert(`Failed to create event. ${error.message}`);
     }
   };
 
   return (
-    <div className="create-event-container">
-      <h2 className="page-title">Crear Nuevo Evento</h2>
-      {error && <p className="error-message">{error}</p>}
-      <form onSubmit={handleEventSubmit} className="event-form">
-        <div className="form-group">
-          <label htmlFor="eventName">Nombre del Evento:</label>
-          <input
-            type="text"
-            id="eventName"
-            value={eventName}
-            onChange={(e) => setEventName(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="eventDescription">Detalles/Descripción:</label>
-          <textarea
-            id="eventDescription"
-            value={eventDescription}
-            onChange={(e) => setEventDescription(e.target.value)}
-            required
-          ></textarea>
-        </div>
-        <div className="form-group">
-          <label htmlFor="eventLocation">Ubicación/Lugar:</label>
-          <input
-            type="text"
-            id="eventLocation"
-            value={eventLocation}
-            onChange={(e) => setEventLocation(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="contactInfo">Información de contacto:</label>
-          <input
-            type="text"
-            id="contactInfo"
-            value={contactInfo}
-            onChange={(e) => setContactInfo(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="eventImage">Imagen (URL):</label>
-          <input
-            type="text"
-            id="eventImage"
-            value={eventImage}
-            onChange={(e) => setEventImage(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="eventDate">Fecha de realización:</label>
-          <input
-            type="date"
-            id="eventDate"
-            value={eventDate}
-            onChange={(e) => setEventDate(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="eventStartTime">Hora de inicio:</label>
-          <input
-            type="time"
-            id="eventStartTime"
-            value={eventStartTime}
-            onChange={(e) => setEventStartTime(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="eventEndTime">Hora de finalización:</label>
-          <input
-            type="time"
-            id="eventEndTime"
-            value={eventEndTime}
-            onChange={(e) => setEventEndTime(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className="submit-button">
-          Crear Evento
-        </button>
-      </form>
-    </div>
+    <>
+      <Navbar />
+      <div className="create-event-container">
+        <h2 className="page-title">Crear Nuevo Evento</h2>
+        {error && <div className="error-message">{error}</div>}
+        <form onSubmit={handleEventSubmit} className="event-form">
+          <div className="form-group">
+            <label htmlFor="eventName">Nombre del Evento:</label>
+            <input
+              type="text"
+              id="eventName"
+              value={eventName}
+              onChange={(e) => setEventName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="eventDescription">Descripción:</label>
+            <textarea
+              id="eventDescription"
+              value={eventDescription}
+              onChange={(e) => setEventDescription(e.target.value)}
+              required
+            ></textarea>
+          </div>
+          <div className="form-group">
+            <label htmlFor="eventLocation">Ubicación:</label>
+            <input
+              type="text"
+              id="eventLocation"
+              value={eventLocation}
+              onChange={(e) => setEventLocation(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group-grid">
+            <div className="form-group">
+              <label htmlFor="contactInfo">Teléfono:</label>
+              <input
+                type="text"
+                id="contactInfo"
+                value={contactInfo}
+                onChange={(e) => setContactInfo(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="eventImage">Imagen (URL):</label>
+              <input
+                type="text"
+                id="eventImage"
+                value={eventImage}
+                onChange={(e) => setEventImage(e.target.value)}
+                required
+              ></input>
+            </div>
+          </div>
+          <div className="form-group-grid">
+            <div className="form-group">
+              <label htmlFor="eventDate">Fecha de realización:</label>
+              <input
+                type="date"
+                id="eventDate"
+                value={eventDate}
+                onChange={(e) => setEventDate(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="eventStartTime">Hora de inicio:</label>
+              <input
+                type="time"
+                id="eventStartTime"
+                value={eventStartTime}
+                onChange={(e) => setEventStartTime(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="eventEndTime">Hora de finalización:</label>
+              <input
+                type="time"
+                id="eventEndTime"
+                value={eventEndTime}
+                onChange={(e) => setEventEndTime(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+          <button type="submit" className="submit-button">
+            Crear Evento
+          </button>
+        </form>
+      </div>
+      <Footer />
+    </>
   );
 };
 

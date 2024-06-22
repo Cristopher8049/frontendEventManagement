@@ -1,52 +1,52 @@
 // import { useParams } from 'react-router-dom'
 // import './EventDetailPage.css'
+import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import styles from "./EventDetailPage.module.css";
-// import Navbar from '../../components/Navbar/Navbar';
+import { useLocation } from 'react-router-dom';
 
 function EventDetailPage() {
-    // const { eventId } = useParams();
+    const location = useLocation();
+    const event = location.state?.eventDetails;
+
+    const formatEventDate = (date) => {
+        if (date === "No date") return date;
+        const months = [
+            "enero", "febrero", "marzo", "abril", "mayo", "junio",
+            "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+        ];
+        const [year, month, day] = date.split('-');
+        return `${parseInt(day)} de ${months[parseInt(month) - 1]}`;
+    };
+
+    const formatEventTime = (time) => {
+        if (time === "No time") return time;
+        const [hours, minutes] = time.split(':');
+        return `${parseInt(hours)}:${minutes} ${parseInt(hours) < 12 ? 'AM' : 'PM'}`;
+    }
+
+
     return (
         <div className={styles.container}>
             <Navbar />
             <div className={styles.hero}>
                 <img
-                    src="https://scontent.fsrz1-1.fna.fbcdn.net/v/t39.30808-6/438081650_936929954795764_6452349645420143575_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_ohc=J8tv491OwLYQ7kNvgHFJL1l&_nc_ht=scontent.fsrz1-1.fna&oh=00_AYAF8aTxjYN8Nu5IxyTq8rV-4Qb6z6VaS6hyh2OfMOYE2g&oe=6675BA39"
+                    src={event.eventImage}
                     alt="Trueno 2024"
                     className={styles.heroImage}
-                    width={1200}
-                    height={800}
+
                 />
-                {/* <div className={styles.overlay}>
-                    <div className={styles.overlayContent}>
-                        <h1 className={styles.title}>Trueno</h1>
-                        <p className={styles.subtitle}>June 15-17, 2024</p>
-                    </div>
-                </div> */}
             </div>
             <div className={styles.content}>
                 <div className={styles.eventInfo}>
                     <div className={styles.grid}>
                         <div className={styles.leftColumn}>
-                            <h2 className={styles.sectionTitle}>Trueno Music Festival</h2>
+                            <h2 className={styles.sectionTitle}>{event.eventName}</h2>
                             <div className={styles.info}>
-                                <div className={styles.infoItem}>
-                                    <CalendarIcon className={styles.icon} />
-                                    <p className={styles.infoText}>21 de junio, 2024</p>
-                                </div>
-                                <div className={styles.infoItem}>
-                                    <ClockIcon className={styles.icon} />
-                                    <p className={styles.infoText}>12:00 PM - 10:00 PM</p>
-                                </div>
-                                <div className={styles.infoItem}>
-                                    <MapIcon className={styles.icon} />
-                                    <p className={styles.infoText}>123 Main St, Anytown USA</p>
-                                </div>
+
                             </div>
                             <p className={styles.description}>
-                                Join us for three days of incredible music, food, and entertainment at the Acme Music Festival. Featuring
-                                world-renowned artists, local vendors, and family-friendly activities, this is an event you wont want to
-                                miss.
+                                {event.eventDescription}
                             </p>
                         </div>
                         <div className={styles.rightColumn}>
@@ -54,17 +54,27 @@ function EventDetailPage() {
                                 Comprar!
                             </Button>
                             <div className={styles.details}>
-                                <h3 className={styles.detailsTitle}>Event Details</h3>
+                                <h3 className={styles.detailsTitle}>Detalles del evento</h3>
                                 <div className={styles.detailsContent}>
-                                    <p>Date: June 15-17, 2024</p>
-                                    <p>Time: 12:00 PM - 10:00 PM</p>
-                                    <p>Location: 123 Main St, Anytown USA</p>
+                                    <div className={styles.infoItem}>
+                                        <CalendarIcon className={styles.icon} />
+                                        <p className={styles.infoText}>{formatEventDate(event.eventDate)}</p>
+                                    </div>
+                                    <div className={styles.infoItem}>
+                                        <ClockIcon className={styles.icon} />
+                                        <p className={styles.infoText}>{formatEventTime(event.eventStartTime)}  - {formatEventTime(event.eventEndTime)}</p>
+                                    </div>
+                                    <div className={styles.infoItem}>
+                                        <MapIcon className={styles.icon} />
+                                        <p className={styles.infoText}>{event.eventLocation}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 

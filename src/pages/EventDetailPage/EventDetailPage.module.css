@@ -1,6 +1,7 @@
 .container {
     display: flex;
     flex-direction: column;
+    margin-top: 80px;
 }
 
 .hero {
@@ -69,6 +70,7 @@
 
 .sectionTitle {
     font-size: 3xl;
+    color: #222222;
 }
 
 .info {

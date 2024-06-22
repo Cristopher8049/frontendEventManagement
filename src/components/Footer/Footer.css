@@ -1,8 +1,9 @@
 .footer {
-    background-color: #000000;
+    background-color: #02132f;
     color: #fff;
     width: 100vw;
     font-size: 14px;
+    margin-top: 50px;
 }
 
 .footer-container {

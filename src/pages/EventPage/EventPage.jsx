@@ -1,11 +1,10 @@
-import CardGrid from "../../components/CardGrid/CardGrid"
-import Carousel from "../../components/Carousel/Carousel"
-import Categories from "../../components/Categories/Categories"
-import Footer from "../../components/Footer/Footer"
-import Navbar from "../../components/Navbar/Navbar"
 import { useEffect, useState } from 'react';
+import './EventPage.css';
+import Navbar from '../../components/Navbar/Navbar';
+import CardGrid from '../../components/CardGrid/CardGrid';
+import Footer from '../../components/Footer/Footer';
 
-function HomePage() {
+function EventPage() {
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
@@ -19,18 +18,17 @@ function HomePage() {
                 throw new Error("Failed to fetch events");
             }
             const eventsData = await response.json();
-            console.log("Fetched events data:", eventsData); // Log the fetched data
+            console.log("Fetched events data:", eventsData);
             setEvents(eventsData);
         } catch (error) {
             console.error("Error fetching events:", error);
-            // Handle error fetching events
         }
     };
+
     return (
         <div>
             <Navbar />
-            <Carousel />
-            <Categories />
+            <div style={{ height: "80px" }}></div>
             <div className="card-grid-container">
                 <div className="card-grid">
                     {events.map((event) => (
@@ -39,8 +37,9 @@ function HomePage() {
                 </div>
             </div>
             <Footer />
+
         </div>
-    )
+    );
 }
 
-export default HomePage;
+export default EventPage;

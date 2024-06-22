@@ -1,10 +1,12 @@
 import { useRef, useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./LoginPage.css";
-import Navbar from "../../components/Navbar/Navbar";
 import useAuth from "../../hooks/useAuth";
 
 const LoginPage = () => {
   const { login, user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const userRef = useRef();
   const errRef = useRef();
 
@@ -20,6 +22,13 @@ const LoginPage = () => {
     setErrMsg("");
   }, [email, password]);
 
+  useEffect(() => {
+    if (user) {
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
+    }
+  }, [user, navigate, location]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -27,74 +36,68 @@ const LoginPage = () => {
       await login(email, password);
     } catch (error) {
       setErrMsg(error.message || 'Login failed');
+      errRef.current.focus();
     }
-
-    errRef.current.focus();
   };
 
+  if (user) {
+    return null;
+  }
+
   return (
-    <>
-      <Navbar />
-      {user ? (
-        <section className={"section"}>
-          <h1 className="section__title">¡Has iniciado sesión!</h1>
-          <br />
-          <p>
-            <a href="#" className="section__link">
-              Ir a la página principal
-            </a>
-          </p>
-        </section>
-      ) : (
-        <section className={"section"}>
+    <div className="login-container">
+      <div className="login-image">
+        {/* Replace with your actual image */}
+        <img src="https://i.postimg.cc/Xvk2bhDk/wallpaperflare-com-wallpaper-1.jpg" alt="Login" />
+      </div>
+      <div className="login-form-container">
+        <div className="login-form-wrapper">
+          <h1 className="login-title">Iniciar sesión</h1>
           <p
             ref={errRef}
-            className={errMsg ? "errmsg error-message" : "offscreen"}
+            className={errMsg ? "error-message" : "offscreen"}
             aria-live="assertive"
           >
             {errMsg}
           </p>
-          <h1 className="section__title">Iniciar sesión</h1>
-          <form onSubmit={handleSubmit} className={"form"}>
-            <label htmlFor="email" className="form__label">
-              Correo Electrónico:
-            </label>
-            <input
-              type="text"
-              id="email"
-              ref={userRef}
-              autoComplete="off"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              required
-              className={"form-input"}
-            />
-
-            <label htmlFor="password" className="form__label">
-              Contraseña:
-            </label>
-            <input
-              type="password"
-              id="password"
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-              required
-              className={"form-input"}
-            />
-            <button className={"form-button"}>Iniciar sesión</button>
+          <form onSubmit={handleSubmit} className="login-form">
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">
+                Correo Electrónico
+              </label>
+              <input
+                type="text"
+                id="email"
+                ref={userRef}
+                autoComplete="off"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                required
+                className="form-input"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">
+                Contraseña
+              </label>
+              <input
+                type="password"
+                id="password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                required
+                className="form-input"
+              />
+            </div>
+            <button className="login-button">Iniciar sesión</button>
           </form>
-          <p>
-            ¿Necesitas una cuenta?
-            <br />
-            <span className={"line"}>
-              <a href="/SignUp" className="line__link">
-                Registrarse
-              </a>
-            </span>
+          <p className="signup-link">
+            ¿Necesitas una cuenta?{" "}
+            <a href="/SignUp">Registrarse</a>
           </p>
-        </section>
-      )}
-    </>
+        </div>
+      </div>
+    </div>
   );
 };
 
