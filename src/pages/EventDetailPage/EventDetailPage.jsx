@@ -66,7 +66,7 @@ function EventDetailPage() {
       eventId: event.eventId,
       userId: userId,
       assistance: !isAttending,
-      registrationDate: new Date().toISOString(), // current date and time in ISO format
+      registrationDate: new Date().toISOString(),
     };
 
     console.log("Registration Data:", registrationData);
